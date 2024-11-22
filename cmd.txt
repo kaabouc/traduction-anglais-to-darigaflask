@@ -1,0 +1,2 @@
+1. scrapy crawl loecsen -o output.csv
+2. scrapy crawl loecsen
