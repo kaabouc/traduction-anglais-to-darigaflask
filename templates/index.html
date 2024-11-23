@@ -95,23 +95,16 @@
             <form method="POST" action="/translate">
                 <div class="input-output">
                     <div class="input-box">
-                        <!-- Remplissez la valeur de l'input avec la variable input_text si elle existe -->
-                        <textarea name="input-text" placeholder="Enter text" required>{% if input_text %}{{ input_text }}{% endif %}</textarea>
+                        <textarea name="english-input" placeholder="Enter English text" required></textarea>
                     </div>
                     <div class="output-box">
-                        <textarea name="output-text" placeholder="Translation" disabled>{% if output %}{{ output }}{% endif %}</textarea>
+                        <textarea name="darija-output" placeholder="Translation" disabled>{% if output %}{{ output }}{% endif %}</textarea>
                     </div>
                 </div>
                 <div class="actions">
-                    <select name="direction">
-                        <option value="en-to-darija" {% if direction == "en-to-darija" %}selected{% endif %}>English to Darija</option>
-                        <option value="darija-to-en" {% if direction == "darija-to-en" %}selected{% endif %}>Darija to English</option>
-                    </select>
                     <button type="submit">Translate</button>
                 </div>
             </form>
-            
-            
 
             <!-- Deuxième formulaire pour ajouter de nouvelles phrases -->
             <form method="POST" action="/add_phrase">

@@ -10,45 +10,34 @@ app = Flask(__name__)
 
 def load_translation_dict(file_path):
     translation_dict = defaultdict(list)
+    reverse_translation_dict = defaultdict(list)
     with open(file_path, 'r') as file:
         reader = csv.reader(file)
         next(reader)  # Skip the header
         for row in reader:
-            if len(row) < 2:  # Skip rows with less than 2 values
+            if len(row) < 2:
                 continue
             darija, english = row
+            # Ajouter les traductions dans les deux sens
             translation_dict[english.lower()].append(darija)
-    return translation_dict
+            reverse_translation_dict[darija.lower()].append(english)
+    return translation_dict, reverse_translation_dict
 
-def translate(sentence, translation_dict):
-    # Remove punctuation from the sentence
+
+def translate(sentence, translation_dict, reverse_dict, direction="en-to-darija"):
     sentence = sentence.translate(str.maketrans('', '', string.punctuation))
     words = nltk.word_tokenize(sentence.lower())
     translated_words = []
-    i = 0
-    while i < len(words):
-        # Check phrases in the translation dictionary
-        matches = []
-        for j in range(i + len(words), i, -1):  # Check sequences of length len(words) to 1
-            phrase = ' '.join(words[i:j])
-            if phrase in translation_dict:
-                matches.append((j-i, phrase))
-        if matches:  # If matches were found
-            # Sort matches by length in descending order and choose the longest
-            matches.sort(key=lambda x: x[0], reverse=True)
-            length, phrase = matches[0]
-            translated_words.append(translation_dict[phrase][0])  # Select the first translation option
-            i += length
-        else:  # No match was found
-            # Use TextBlob to correct the word
-            corrected_word = Word(words[i]).correct()
-            # If the corrected word is in the dictionary, translate it
-            if corrected_word in translation_dict:
-                translated_words.append(translation_dict[corrected_word][0])
-            else:  # If the corrected word is still not in the dictionary, return the original word
-                translated_words.append(words[i])
-            i += 1
-    return ' '.join([str(word) for word in translated_words])
+    current_dict = translation_dict if direction == "en-to-darija" else reverse_dict
+
+    for word in words:
+        if word in current_dict:
+            translated_words.append(current_dict[word][0])  # Utilisez la première traduction disponible
+        else:
+            # Si le mot n'existe pas, on le garde inchangé
+            translated_words.append(word)
+    return ' '.join(translated_words)
+
 
 def add_phrase_to_dict(english_phrase, darija_phrase, file_path):
     with open(file_path, 'a') as file:
