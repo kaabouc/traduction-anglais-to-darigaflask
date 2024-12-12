@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>HIM7-Ensiasd-TRANSLATOR</title>
+  <title>readme-FSTG-TRANSLATOR</title>
   <style>
     body {
         margin: 0;
@@ -95,37 +95,54 @@
             <form method="POST" action="/translate">
                 <div class="input-output">
                     <div class="input-box">
-                        <!-- Remplissez la valeur de l'input avec la variable input_text si elle existe -->
-                        <textarea name="input-text" placeholder="Enter text" required>{% if input_text %}{{ input_text }}{% endif %}</textarea>
+                        <textarea id="input-text" name="input-text" rows="4" cols="50" placeholder="entrer votre message ..." required>{{ input_text or "" }}</textarea><br><br>
                     </div>
                     <div class="output-box">
-                        <textarea name="output-text" placeholder="Translation" disabled>{% if output %}{{ output }}{% endif %}</textarea>
+                        <textarea placeholder="Response ..." disabled>{% if refined_output %}{{ refined_output }}{% endif %}</textarea>
                     </div>
                 </div>
+        
+                <label for="direction">Translation Direction:</label>
+                <select id="direction" name="direction">
+                    <option value="darija_to_eng" selected>Darija to English</option>
+                    <option value="eng_to_darija">English to Darija</option>
+                </select><br><br>
+                <!-- {% if initial_output %}
+                <h2>Initial Translation:</h2>
+                <p>{{ initial_output }}</p>
+                {% endif %}
+            
+                {% if refined_output %}
+                <h2>Refined Translation (Gemini):</h2>
+                <p>{{ refined_output }}</p>
+                {% endif %}
+            
+                {% if error %}
+                <h2>Error:</h2>
+                <p>{{ error }}</p>
+                {% endif %} -->
                 <div class="actions">
-                    <select name="direction">
-                        <option value="en-to-darija" {% if direction == "en-to-darija" %}selected{% endif %}>English to Darija</option>
-                        <option value="darija-to-en" {% if direction == "darija-to-en" %}selected{% endif %}>Darija to English</option>
-                    </select>
                     <button type="submit">Translate</button>
                 </div>
-            </form>
+                </form>
+        
+            
             
             <!-- Formulaire pour interroger Gemini -->
             <form method="POST" action="/ask_gemini">
                 <header>
-                    <h2>Ask Gemini</h2>
+                    <h2>Ask Chatbot</h2>
                 </header>
                 <div class="input-output">
                     <div class="input-box">
-                        <textarea name="question" placeholder="Enter your question" required></textarea>
+                        <textarea name="question" placeholder="Enter your question" required>{{ question or "" }}</textarea>
                     </div>
                     <div class="output-box">
-                        <textarea placeholder="Response from Gemini" disabled>{% if gemini_response %}{{ gemini_response }}{% endif %}</textarea>
+                        <textarea placeholder="Response ..." disabled>{% if gemini_response %}{{ gemini_response }}{% endif %}</textarea>
                     </div>
                 </div>
                 <div class="actions">
-                    <button type="submit">Ask Gemini</button>
+                    <button type="submit">Ask chat</button>
                 </div>
             </form>
 
