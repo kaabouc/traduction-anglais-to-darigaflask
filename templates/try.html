@@ -1,176 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>readme-FSTG-TRANSLATOR</title>
-  <style>
-    body {
-        margin: 0;
-        padding: 0;
-        font-family: 'Trebuchet MS', sans-serif; /* Roboto est une police moderne et lisible */
-        background-image: url("{{ url_for('static', filename='background.jpg') }}");
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-color: #f5f5f5; /* Couleur de fond claire pour un contraste doux */
-    }
-    .container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        padding: 20px;
-    }
-    .translator-box {
-        width: 100%;
-        max-width: 900px;
-        background: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-        border: 2px solid #4a47a3; /* Bordure bleu-violet pour un contraste élégant */
-    }
-    .translator-box header {
-        background: #4a47a3; /* Fond bleu-violet pour un contraste élégant */
-        color: #fff;
-        padding: 15px 20px;
-        text-align: center;
-        font-size: 1.5em;
-        border-bottom: 2px solid #fff;
-    }
-    .translator-box header h2 {
-        margin: 0;
-        font-size: 1.5em;
-    }
-    .translator-box .input-output {
-        display: flex;
-        border-bottom: 1px solid #ddd;
-    }
-    .translator-box .input-output .input-box,
-    .translator-box .input-output .output-box {
-        width: 50%;
-        padding: 20px;
-    }
-    .translator-box .input-output .input-box textarea,
-    .translator-box .input-output .output-box textarea {
-        width: 100%;
-        height: 150px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        padding: 10px;
-        font-size: 1em;
-        resize: none;
-    }
-    .translator-box .input-output .output-box {
-        border-left: 1px solid #ddd;
-    }
-    .translator-box .actions {
-        padding: 20px;
-        text-align: center;
-    }
-    .translator-box .actions button {
-        padding: 10px 20px;
-        font-size: 1em;
-        color: #fff;
-        background:  #4a47a3; /* Bouton bleu-violet pour un contraste élégant */
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background 0.3s;
-    }
-    .translator-box .actions button:hover {
-        background: #7a77ff; /* Bleu-violet plus clair au survol */
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(246, 8, 147, 0.5);
-    }
-</style>
-
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darija Translator</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .translator-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 1000px;
+            width: 100%;
+        }
+        .nav-tabs .nav-link {
+            color: #4a47a3;
+        }
+        .nav-tabs .nav-link.active {
+            background-color: #4a47a3;
+            color: white;
+        }
+        .form-section {
+            padding: 20px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .btn-translate {
+            background-color: #4a47a3;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .btn-translate:hover {
+            background-color: #6a67b3;
+            transform: translateY(-2px);
+        }
+        @media (max-width: 768px) {
+            .translator-container {
+                margin: 0 10px;
+            }
+            .input-output-container {
+                flex-direction: column;
+            }
+            .input-output-container > div {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="translator-box">
-            <header>
-                <h2>English to Darija Translator</h2>
-            </header>
-            <!-- Premier formulaire de traduction -->
-            <form method="POST" action="/translate">
-                <div class="input-output">
-                    <div class="input-box">
-                        <textarea id="input-text" name="input-text" rows="4" cols="50" placeholder="entrer votre message ..." required>{{ input_text or "" }}</textarea><br><br>
+    <div class="container translator-container">
+        <ul class="nav nav-tabs" id="translatorTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="translate-tab" data-bs-toggle="tab" data-bs-target="#translate" type="button" role="tab">
+                    <i class="fas fa-language"></i> Translator
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="chatbot-tab" data-bs-toggle="tab" data-bs-target="#chatbot" type="button" role="tab">
+                    <i class="fas fa-comment-dots"></i> Chatbot
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="contribute-tab" data-bs-toggle="tab" data-bs-target="#contribute" type="button" role="tab">
+                    <i class="fas fa-plus-circle"></i> Contribute
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="translatorTabContent">
+            <!-- Translator Tab -->
+            <div class="tab-pane fade show active form-section" id="translate" role="tabpanel">
+                <form method="POST" action="/translate">
+                    <div class="row input-output-container">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="input-text" class="mb-2">
+                                    <i class="fas fa-arrow-right"></i> Input Text
+                                </label>
+                                <textarea id="input-text" name="input-text" class="form-control" rows="4" placeholder="Enter your message..." required>{{ input_text or "" }}</textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="mb-2">
+                                    <i class="fas fa-arrow-left"></i> Translation
+                                </label>
+                                <textarea class="form-control" rows="4" placeholder="Translation..." disabled>{% if refined_output %}{{ refined_output }}{% endif %}</textarea>
+                            </div>
+                        </div>
                     </div>
-                    <div class="output-box">
-                        <textarea placeholder="Response ..." disabled>{% if refined_output %}{{ refined_output }}{% endif %}</textarea>
+
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <select id="direction" name="direction" class="form-select">
+                                <option value="darija_to_eng" selected>Darija to English</option>
+                                <option value="eng_to_darija">English to Darija</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <button type="submit" class="btn btn-translate">
+                                <i class="fas fa-translate"></i> Translate
+                            </button>
+                        </div>
                     </div>
-                </div>
-        
-                <label for="direction">Translation Direction:</label>
-                <select id="direction" name="direction">
-                    <option value="darija_to_eng" selected>Darija to English</option>
-                    <option value="eng_to_darija">English to Darija</option>
-                </select><br><br>
-                <!-- {% if initial_output %}
-                <h2>Initial Translation:</h2>
-                <p>{{ initial_output }}</p>
-                {% endif %}
-            
-                {% if refined_output %}
-                <h2>Refined Translation (Gemini):</h2>
-                <p>{{ refined_output }}</p>
-                {% endif %}
-            
-                {% if error %}
-                <h2>Error:</h2>
-                <p>{{ error }}</p>
-                {% endif %} -->
-                <div class="actions">
-                    <button type="submit">Translate</button>
-                </div>
                 </form>
-        
-            
-            
-            <!-- Formulaire pour interroger Gemini -->
-            <form method="POST" action="/ask_gemini">
-                <header>
-                    <h2>Ask Chatbot</h2>
-                </header>
-                <div class="input-output">
-                    <div class="input-box">
-                        <textarea name="question" placeholder="Enter your question" required>{{ question or "" }}</textarea>
-                    </div>
-                    <div class="output-box">
-                        <textarea placeholder="Response ..." disabled>{% if gemini_response %}{{ gemini_response }}{% endif %}</textarea>
-                    </div>
-                </div>
-                <div class="actions">
-                    <button type="submit">Ask chat</button>
-                </div>
-            </form>
+            </div>
 
+            <!-- Chatbot Tab -->
+            <div class="tab-pane fade form-section" id="chatbot" role="tabpanel">
+                <form method="POST" action="/ask_gemini">
+                    <div class="row input-output-container">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="mb-2">
+                                    <i class="fas fa-comment"></i> Your Question
+                                </label>
+                                <textarea name="question" class="form-control" rows="4" placeholder="Enter your question" required>{{ question or "" }}</textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="mb-2">
+                                    <i class="fas fa-reply"></i> Response
+                                </label>
+                                <textarea class="form-control" rows="4" placeholder="Chatbot response..." disabled>{% if gemini_response %}{{ gemini_response }}{% endif %}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-end mt-3">
+                        <button type="submit" class="btn btn-translate">
+                            <i class="fas fa-paper-plane"></i> Ask Chatbot
+                        </button>
+                    </div>
+                </form>
+            </div>
 
-            <!-- Deuxième formulaire pour ajouter de nouvelles phrases -->
-            <form method="POST" action="/add_phrase">
-                <header>
-                    <h2>Contribute to our dictionnary</h2>
-                
-                </header>
-                
-                
-                <div class="input-output">
-                    <div class="input-box">
-                        <input type="text" name="english-phrase" placeholder="Enter Darija phrase" required>
+            <!-- Contribute Tab -->
+            <div class="tab-pane fade form-section" id="contribute" role="tabpanel">
+                <form method="POST" action="/add_phrase">
+                    <div class="row input-output-container">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="mb-2">
+                                    <i class="fas fa-globe"></i> Darija Phrase
+                                </label>
+                                <input type="text" name="english-phrase" class="form-control" placeholder="Enter Darija phrase" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="mb-2">
+                                    <i class="fas fa-language"></i> English Translation
+                                </label>
+                                <input type="text" name="darija-phrase" class="form-control" placeholder="Enter English translation" required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="output-box">
-                        <input type="text" name="darija-phrase" placeholder="Enter English translation" required>
+                    <div class="text-end mt-3">
+                        <button type="submit" class="btn btn-translate">
+                            <i class="fas fa-plus"></i> Add Phrase
+                        </button>
                     </div>
-                </div>
-                <div class="actions">
-                    <button type="submit">Add Phrase</button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
-
-
-
