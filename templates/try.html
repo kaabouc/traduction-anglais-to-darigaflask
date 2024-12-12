@@ -111,7 +111,24 @@
                 </div>
             </form>
             
-            
+            <!-- Formulaire pour interroger Gemini -->
+            <form method="POST" action="/ask_gemini">
+                <header>
+                    <h2>Ask Gemini</h2>
+                </header>
+                <div class="input-output">
+                    <div class="input-box">
+                        <textarea name="question" placeholder="Enter your question" required></textarea>
+                    </div>
+                    <div class="output-box">
+                        <textarea placeholder="Response from Gemini" disabled>{% if gemini_response %}{{ gemini_response }}{% endif %}</textarea>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button type="submit">Ask Gemini</button>
+                </div>
+            </form>
+
 
             <!-- Deuxième formulaire pour ajouter de nouvelles phrases -->
             <form method="POST" action="/add_phrase">

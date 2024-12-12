@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 from last import app, translate, load_translation_dict, add_phrase_to_dict  # Importez app depuis last.py
+from chatgemini import model
 
 app = Flask(__name__)
 
@@ -13,6 +14,18 @@ def translator():
 @app.route('/try.html')
 def home():
     return render_template('try.html')
+
+@app.route('/ask_gemini', methods=['POST'])
+def ask_gemini():
+    question = request.form['question']
+    try:
+        response = model.generate_content(f"Respond concisely in English: {question}")
+        gemini_response = response.text.strip()
+    except Exception as e:
+        gemini_response = f"Error: {str(e)}"
+
+    return render_template('try.html', gemini_response=gemini_response, question=question)
+
 
 @app.route("/translate", methods=["POST"])
 def translate_text():
