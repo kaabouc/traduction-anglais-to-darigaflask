@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from last import app, translate, load_translation_dict, add_phrase_to_dict  # Importez app depuis last.py
 from chatgemini import model
+import os
 
 app = Flask(__name__)
 
@@ -80,4 +81,8 @@ def add_phrase():
 if __name__ == '__main__':
     # Charger les deux dictionnaires (Anglais → Darija et Darija → Anglais)
     translation_dict, reverse_translation_dict = load_translation_dict('dataset.csv')
-    app.run(debug=True)
+    # Obtenez le port depuis l'environnement ou utilisez 5000 par défaut
+    port = int(os.environ.get("PORT", 5000))
+
+    # Démarrez le serveur Flask
+    app.run(host="0.0.0.0", port=port, debug=True)
